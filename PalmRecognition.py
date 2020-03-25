@@ -16,9 +16,15 @@ matplotlib.rcParams['axes.unicode_minus'] = False
 class PalmRecognition(object):
     def __init__(self, dataset_path):
         self.path = dataset_path
-        self.gabor_filter_size = [128, 128]
-        self.gabor_filter_lambda = [6 * np.power(2, 0.5)]  #
-        self.gabor_filter_sigma = [3]  # 高斯包络的标准差.带宽设置为1时，σ 约= 0.56 λ
+        self.gabor_filter_size = [32, 32]
+        self.gabor_filter_lambda = [
+            # 2 * np.power(2, 0.5),
+            4 * np.power(2, 0.5),
+            # 6 * np.power(2, 0.5),
+        ]  #
+        self.gabor_filter_sigma = [
+            1.56,
+        ]  # 高斯包络的标准差.带宽设置为1时，σ 约= 0.56 λ
         self.gabor_filter_theta = [theta for theta in np.arange(0, np.pi, np.pi / 12)]  # Gabor函数平行条纹的法线方向
         self.gabor_filter_gamma = 0.5  # 空间纵横比
         self.gabor_filter_psi = 0  # 相移
@@ -37,7 +43,7 @@ class PalmRecognition(object):
         for r in range(len(self.gabor_filter_lambda)):  # 尺度
             for c in range(len(self.gabor_filter_theta)):  # 方向
                 self.filters_real.append(self.build_a_gabor_filters_real_component(self.gabor_filter_size,
-                                                                                   self.gabor_filter_sigma[r],
+                                                                                   self.gabor_filter_sigma[-1],
                                                                                    self.gabor_filter_theta[c],
                                                                                    self.gabor_filter_lambda[r],
                                                                                    self.gabor_filter_gamma,
@@ -45,7 +51,8 @@ class PalmRecognition(object):
         for r in range(len(self.gabor_filter_lambda)):
             for c in range(len(self.gabor_filter_theta)):
                 self.filters_imaginary.append(self.build_a_gabor_filters_imaginary_component(self.gabor_filter_size,
-                                                                                             self.gabor_filter_sigma[r],
+                                                                                             self.gabor_filter_sigma[
+                                                                                                 -1],
                                                                                              self.gabor_filter_theta[c],
                                                                                              self.gabor_filter_lambda[
                                                                                                  r],
